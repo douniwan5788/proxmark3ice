@@ -262,7 +262,7 @@ cleanifplatformchanged:
 ifeq ($(PLATFORM_CHANGED),true)
 	$(info [!] Platform definitions changed, cleaning bootrom/armsrc/recovery first...)
 	@echo The Macro: $(CHANGED_MACROS) changed
-	$(eval REBUILD_FILES=$(foreach MACRO,$(CHANGED_MACROS),$(shell grep -rl --include "*.h" --include "*.c" $(subst -D,,$(MACRO) bootrom armsrc client tools/fpga_compress))))
+	$(eval REBUILD_FILES=$(foreach MACRO,$(CHANGED_MACROS),$(shell grep -rl --include "*.h" --include "*.c" $(subst -D,,$(MACRO) armsrc bootrom client common common_arm common_fpga include tools/fpga_compress))))
 	@echo rebuild $(REBUILD_FILES)
 	$(Q)touch $(REBUILD_FILES)
 	$(Q)$(ECHO) CACHED_PLATFORM=$(PLATFORM) > .Makefile.options.cache
