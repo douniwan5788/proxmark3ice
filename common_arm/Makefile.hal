@@ -286,6 +286,10 @@ else ifneq ($(PLATFORM_DEFS), $(CACHED_PLATFORM_DEFS))
     PLATFORM_CHANGED=true
 endif
 
+ifeq ($(PLATFORM_CHANGED),true)
+CHANGED_MACROS :=$(filter-out $(filter $(PLATFORM_DEFS),$(CACHED_PLATFORM_DEFS)),$(PLATFORM_DEFS) $(CACHED_PLATFORM_DEFS))
+endif
+
 export PLATFORM
 export PLATFORM_EXTRAS
 export PLATFORM_EXTRAS_INFO
@@ -297,6 +301,7 @@ export PLATFORM_DEFS_INFO
 export PLATFORM_DEFS_INFO_STANDALONE
 export PLATFORM_CHANGED
 export FPGA_BITSTREAMS
+export CHANGED_MACROS
 
 $(info ===================================================================)
 $(info Version info:      $(shell tools/mkversion.sh --short 2>/dev/null || ../tools/mkversion.sh --short 2>/dev/null))

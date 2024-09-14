@@ -175,6 +175,11 @@ endif
 OBJS = $(OBJDIR)/fullimage.s19
 FPGA_COMPRESSOR = ../tools/fpga_compress/fpga_compress
 
+FORCE_UPDATE :=
+ifneq (,$(filter -DWITH_LF -DWITH_ISO15693 -DWITH_FELICA,$(CHANGED_MACROS)))
+    FORCE_UPDATE += .FORCE
+endif
+
 all: showinfo $(OBJS)
 
 showinfo:
@@ -187,7 +192,7 @@ version_pm3.c: default_version_pm3.c $(OBJDIR)/fpga_version_info.o $(OBJDIR)/fpg
 	$(info [-] CHECK $@)
 	$(Q)$(SH) ../tools/mkversion.sh $@ || $(CP) $< $@
 
-fpga_version_info.c: $(FPGA_BITSTREAMS) $(FPGA_COMPRESSOR)
+fpga_version_info.c: $(FPGA_BITSTREAMS) $(FPGA_COMPRESSOR) $(FORCE_UPDATE)
 	$(info [-] GEN $@)
 	$(Q)$(FPGA_COMPRESSOR) -v $(filter %.bit,$^) $@
 
@@ -195,7 +200,7 @@ $(OBJDIR)/fpga_all.o: $(OBJDIR)/fpga_all.bit.z
 	$(info [-] GEN $@)
 	$(Q)$(CROSS_OBJCOPY) -O elf32-littlearm -I binary -B arm --prefix-sections=fpga_all_bit $^ $@
 
-$(OBJDIR)/fpga_all.bit.z: $(FPGA_BITSTREAMS) | $(FPGA_COMPRESSOR)
+$(OBJDIR)/fpga_all.bit.z: $(FPGA_BITSTREAMS) $(FORCE_UPDATE) | $(FPGA_COMPRESSOR)
 	$(info [-] GEN $@)
 ifeq ($(Q),@)
 	@$(FPGA_COMPRESSOR) $(filter %.bit,$^) $@ >/dev/null
