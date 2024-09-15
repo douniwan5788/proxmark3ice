@@ -264,7 +264,7 @@ ifeq ($(PLATFORM_CHANGED),true)
 	@echo The Macro: $(CHANGED_MACROS) changed
 	$(eval REBUILD_FILES=$(foreach MACRO,$(CHANGED_MACROS),$(shell grep -rl --include "*.h" --include "*.c" $(subst -D,,$(MACRO) armsrc bootrom client common common_arm common_fpga include tools/fpga_compress))))
 	@echo rebuild $(REBUILD_FILES)
-	$(Q)touch $(REBUILD_FILES)
+	-$(Q)touch $(REBUILD_FILES)
 	$(Q)$(ECHO) CACHED_PLATFORM=$(PLATFORM) > .Makefile.options.cache
 	$(Q)$(ECHO) CACHED_PLATFORM_EXTRAS=$(PLATFORM_EXTRAS) >> .Makefile.options.cache
 	$(Q)$(ECHO) CACHED_PLATFORM_DEFS=$(PLATFORM_DEFS) >> .Makefile.options.cache
